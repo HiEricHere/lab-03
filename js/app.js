@@ -34,6 +34,7 @@ function displayPage(data) {
     $newPhoto.find('img').attr('src', element.image_url);
     $newPhoto.find('p').text(element.description);
     $newPhoto.attr('data-keyword', element.keyword);
+    $newPhoto.removeAttr('id');
 
     $('main').append($newPhoto);
 
@@ -42,6 +43,9 @@ function displayPage(data) {
     }
 
   });
+
+  // remove photo template
+  $('#photo-template').remove();
 
   keywordArr.forEach(element => {
     const $newOption = $('#option-template').clone();
@@ -67,11 +71,6 @@ function attachListeners() {
 
   });
 }
-// get all the unique keyword out of returned data
-// add those keywords to the select options
-// setup listener on the select
-// hide and diplay images based on what was selected
-
 
 $(startApp);
 

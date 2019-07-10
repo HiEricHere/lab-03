@@ -4,6 +4,7 @@ main > section {
   width: 200px;
   box-sizing: border-box;
   padding: 5px;
+  border-radius: 10px;
 }
 
 main > section > img {
@@ -11,4 +12,5 @@ main > section > img {
   width: 150px;
   padding: 5px;
   object-fit: contain;
+
 }
