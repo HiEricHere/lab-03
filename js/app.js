@@ -2,7 +2,10 @@
 
 
 function startApp() {
+
   loadData();
+
+  attachListeners();
 
 }
 
@@ -31,6 +34,7 @@ function displayPage(data) {
     $newPhoto.find('img').attr('src', element.image_url);
     $newPhoto.find('p').text(element.description);
     $newPhoto.attr('data-keyword', element.keyword);
+    $newPhoto.removeAttr('id');
 
     $('main').append($newPhoto);
 
@@ -39,6 +43,9 @@ function displayPage(data) {
     }
 
   });
+
+  // remove photo template
+  $('#photo-template').remove();
 
   keywordArr.forEach(element => {
     const $newOption = $('#option-template').clone();
@@ -49,10 +56,22 @@ function displayPage(data) {
   });
 }
 
-// get all the unique keyword out of returned data
-// add those keywords to the select options
-// setup listener on the select
-// hide and diplay images based on what was selected
 
+function attachListeners() {
+  $('select').on('change', event => {
+    const $choice = $(event.target).val();
+    console.log($choice);
+
+    if ($choice === 'default') {
+      $('.photo-class').show();
+    } else {
+      $('.photo-class').hide();
+      $('.photo-class[data-keyword="' + $choice + '"]').show();
+    }
+
+  });
+}
 
 $(startApp);
+
+

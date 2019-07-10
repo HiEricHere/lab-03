@@ -1,4 +1,16 @@
 main > section {
-  height: 200px;
+  background-color: lightgrey;
+  height: 275px;
+  width: 200px;
   box-sizing: border-box;
+  padding: 5px;
+  border-radius: 10px;
+}
+
+main > section > img {
+  height: 150px;
+  width: 150px;
+  padding: 5px;
+  object-fit: contain;
+
 }
