@@ -8,14 +8,21 @@ body {
   text-align: center;
 }
 
+header {
+  height: 100px;
+}
+
 h1 {
+  float: left;
   font-size: 30px;
+  margin-bottom: 20px;
 }
 
 h2 {
-  font-size: 25px;
+  font-size: 20px;
 }
 
 p {
   font-size: 15px;
+  margin: 5px;
 }
