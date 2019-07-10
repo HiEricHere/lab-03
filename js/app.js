@@ -2,7 +2,10 @@
 
 
 function startApp() {
+
   loadData();
+
+  attachListeners();
 
 }
 
@@ -49,6 +52,21 @@ function displayPage(data) {
   });
 }
 
+
+function attachListeners() {
+  $('select').on('change', event => {
+    const $choice = $(event.target).val();
+    console.log($choice);
+
+    if ($choice === 'default') {
+      $('.photo-class').show();
+    } else {
+      $('.photo-class').hide();
+      $('.photo-class[data-keyword="' + $choice + '"]').show();
+    }
+
+  });
+}
 // get all the unique keyword out of returned data
 // add those keywords to the select options
 // setup listener on the select
@@ -56,3 +74,5 @@ function displayPage(data) {
 
 
 $(startApp);
+
+
