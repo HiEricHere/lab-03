@@ -14,7 +14,6 @@ function ImageData(rawData) {
     this[key] = rawData[key];
   }
 }
-console.log('this is the titles',list);
 
 function loadImgArray(data){
   data.forEach( element => {
