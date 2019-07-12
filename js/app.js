@@ -1,12 +1,7 @@
 const imgArray = [];
 
-
-
 function startApp() {
-  loadData();
-  displayPage(imgArray);
-  attachListeners();
-
+  loadData(1);
 }
 
 function ImageData(rawData) {
@@ -21,27 +16,25 @@ function loadImgArray(data){
   });
 }
 
+function loadData(page) {
 
-function loadData() {
-
-  const success = retrievedInfo => loadImgArray(retrievedInfo);
-
-  $.get('./data/page-1.json', (data) => {
+  $.get(`./data/page-${page}.json`).then(data => {
     if (data.length) {
-      success(data);
+      loadImgArray(data);
+      displayPage(data);
+      attachListeners(data);
     } else {
       console.log('something went wrong with $.get');
     }
   }, 'json');
-
 }
 
 function displayPage(data) {
   const keywordArr = [];
-  console.log(imgArray);
-  console.log(typeof imgArray);
+  console.log(data);
+  console.log(typeof data);
 
-  data.forEach(element => {
+  data.forEach( (element) => {
     let template = $('#photoScript').html();
     let templateScript = Handlebars.compile(template);
     let context = { 'keyword' : element.keyword, 'title' : element.title, 'image_url' : element.image_url, 'description' : element.description };
@@ -64,7 +57,7 @@ function displayPage(data) {
 }
 
 
-function attachListeners() {
+function attachListeners(data) {
   $('#selectPics').on('change', event => {
     const $choice = $(event.target).val();
     console.log($choice);
@@ -80,26 +73,22 @@ function attachListeners() {
 
   $('#selectFilter').on('change', event => {
     const $filter = $(event.target).val();
-    console.log($filter);
-
-    // clear out picture from DOM
-
-    // sort data
-
-    // recall render function
-
-
-
-    //if title
-    // data.sort((a,b) => {
-    //   if (a.title > b.title) return 1;
-    //   if (b.title > a.title) return -1;
-   //   return 0;
-   // });
-
-    //if horns
-   // data.sort( (a,b) => a.horns - b.horns );
-
+    
+    if ($filter === 'Horns') {
+      data.sort( (a,b) => a.horns - b.horns );
+      $('main').empty();
+      displayPage(data);
+    } else if ( $filter === 'Title') {
+      $('main').empty();
+      data.sort( (a,b) => {
+        if ( a.title > b.title ){
+          return 1;
+        } else if ( a.title < b.title ){
+          return -1;
+        } else return 0;
+      });
+      displayPage(data);
+    } else displayPage(data);
   });
 }
 

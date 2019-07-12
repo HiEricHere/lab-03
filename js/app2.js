@@ -1,28 +1,40 @@
-function startApp() {
-  loadData();
-  attachListeners();
+const imgArray = [];
 
+function startApp() {
+  loadData(2);
 }
 
-function loadData() {
+function ImageData(rawData) {
+  for(let key in rawData) {
+    this[key] = rawData[key];
+  }
+}
 
-  const success = retrievedInfo => displayPage(retrievedInfo);
+function loadImgArray(data){
+  data.forEach( element => {
+    imgArray.push(new ImageData(element));
+  });
+}
 
-  $.get('./data/page-2.json', data => {
+function loadData(page) {
+
+  $.get(`./data/page-${page}.json`).then(data => {
     if (data.length) {
-      success(data);
+      loadImgArray(data);
+      displayPage(data);
+      attachListeners(data);
     } else {
       console.log('something went wrong with $.get');
     }
   }, 'json');
 }
 
-
 function displayPage(data) {
   const keywordArr = [];
+  console.log(data);
+  console.log(typeof data);
 
-  data.forEach(element => {
-
+  data.forEach( (element) => {
     let template = $('#photoScript').html();
     let templateScript = Handlebars.compile(template);
     let context = { 'keyword' : element.keyword, 'title' : element.title, 'image_url' : element.image_url, 'description' : element.description };
@@ -36,19 +48,17 @@ function displayPage(data) {
 
   });
 
-
   keywordArr.forEach(element => {
     const $newOption = $('#option-template').clone();
     $newOption.text(element);
     $newOption.attr('value', element);
-
-    $('select').append($newOption);
+    $('#selectPics').append($newOption);
   });
 }
 
 
-function attachListeners() {
-  $('select').on('change', event => {
+function attachListeners(data) {
+  $('#selectPics').on('change', event => {
     const $choice = $(event.target).val();
     console.log($choice);
 
@@ -60,8 +70,26 @@ function attachListeners() {
     }
 
   });
+
+  $('#selectFilter').on('change', event => {
+    const $filter = $(event.target).val();
+    
+    if ($filter === 'Horns') {
+      data.sort( (a,b) => a.horns - b.horns );
+      $('main').empty();
+      displayPage(data);
+    } else if ( $filter === 'Title') {
+      $('main').empty();
+      data.sort( (a,b) => {
+        if ( a.title > b.title ){
+          return 1;
+        } else if ( a.title < b.title ){
+          return -1;
+        } else return 0;
+      });
+      displayPage(data);
+    } else displayPage(data);
+  });
 }
 
 $(startApp);
-
-
